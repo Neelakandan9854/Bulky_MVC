@@ -1,4 +1,6 @@
-﻿<form method="post">
+﻿@model CartVM
+
+<form method="post">
     <br/>
     <div class="container">
         <div class="card shadow border-0">
@@ -6,11 +8,11 @@
                 <div class="row px-4">
                     <div class="col-6">
                         <h5 class="pt-2 text-white">
-                            Shopping Cart
+                            Order Summary
                         </h5>
                     </div>
                     <div class="col-6 text-end">
-                        <a class="btn btn-outline-danger btn-sm">Back to Cart</a>
+                        <a  asp-action="Index" class="btn btn-outline-danger btn-sm">Back to Cart</a>
                     </div>
                 </div>
             </div>
@@ -28,7 +30,8 @@
                                     <label>Name</label>
                                 </div>
                                 <div class="col-9">
-                                    <input class="form-control" />
+                                    <input asp-for="OrderHead.Name" class="form-control" />
+                                    <span asp-validation-for="OrderHead.Name" class="text-danger"></span>
                                 </div>
                             </div>
                             <div class="row my-1">
@@ -36,7 +39,8 @@
                                     <label>Phone</label>
                                 </div>
                                 <div class="col-9">
-                                    <input class="form-control" />
+                                    <input asp-for="OrderHead.PhoneNumber" class="form-control" />
+                                    <span asp-validation-for="OrderHead.PhoneNumber" class="text-danger"></span>
                                 </div>
                             </div>
                             <div class="row my-1">
@@ -44,7 +48,8 @@
                                     <label>Street Address</label>
                                 </div>
                                 <div class="col-9">
-                                    <input class="form-control" />
+                                    <input asp-for="OrderHead.StreetAdress" class="form-control" />
+                                    <span asp-validation-for="OrderHead.StreetAdress" class="text-danger"></span>
                                 </div>
                             </div>
                             <div class="row my-1">
@@ -52,7 +57,8 @@
                                     <label>City</label>
                                 </div>
                                 <div class="col-9">
-                                    <input class="form-control" />
+                                    <input asp-for="OrderHead.City" class="form-control" />
+                                    <span asp-validation-for="OrderHead.City" class="text-danger"></span>
                                 </div>
                             </div>
                             <div class="row my-1">
@@ -60,7 +66,8 @@
                                     <label>State</label>
                                 </div>
                                 <div class="col-9">
-                                    <input class="form-control" />
+                                    <input asp-for="OrderHead.State" class="form-control" />
+                                    <span asp-validation-for="OrderHead.State" class="text-danger"></span>
                                 </div>
                             </div>
                             <div class="row my-1">
@@ -68,7 +75,8 @@
                                     <label>Postal Code  </label>
                                 </div>
                                 <div class="col-9">
-                                    <input class="form-control" />
+                                    <input asp-for="OrderHead.Postalcode" class="form-control" />
+                                    <span asp-validation-for="OrderHead.Postalcode" class="text-danger"></span>
                                 </div>
                             </div>
                         </div>
@@ -77,17 +85,19 @@
                                 <span class="text-info">Order Summary:</span>
                             </h4>
                             <ul class="list-group mb-3">
+                                @foreach(var detail in Model.Listcarts){
                                 <li class="list-group-item d-flex justify-content-between">
                                     <div>
-                                        <h6 class="my-0">Tittle</h6>
-                                        <small class="text-muted">Quantity:Count</small>
+                                        <h6 class="my-0">@detail.Product.Tittle</h6>
+                                        <small class="text-muted">Quantity:@detail.Count</small>
                                     </div>
-                                    <span class="text-muted">Price*Count</span>
+                                    <span class="text-muted">@((detail.price*detail.Count).ToString("c"))</span>
                                 </li>
                                 <li class="list-group-item d-flex justify-content-between bg-light">       
-                                        <small class="text-muted">Quantity:Count</small>
-                                        <strong class="text-info">$$</strong>
+                                        <small class="text-muted">Total(INR)</small>
+                                        <strong class="text-info">@Model.OrderHead.OrderTotal.ToString("c")</strong>
                                 </li>
+                                }
                             </ul>
                         </div>
                     </div>
@@ -98,6 +108,7 @@
                     <div class="col-12 col-md-8 pt-2">
                         <p style="color:maroon; font-size:14px">
                             Estimate Arrival Date:
+                            @DateTime.Now.AddDays(7).ToShortDateString() -  @DateTime.Now.AddDays(14).ToShortDateString()
                         </p>
                     </div>
                     <div class="col-12 col-md-4">

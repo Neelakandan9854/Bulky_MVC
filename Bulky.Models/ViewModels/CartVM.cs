@@ -9,7 +9,7 @@ namespace Bulky.Models.ViewModels
     public class CartVM
     {
         public IEnumerable<Carts> Listcarts { get; set; }
-
-        public double ordertotal { get; set; }  
+         public OrderHead OrderHead { get; set; }
+        
     }
 }
