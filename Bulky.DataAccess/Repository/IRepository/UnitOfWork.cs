@@ -7,16 +7,24 @@ using System.Threading.Tasks;
 
 namespace Bulky.DataAccess.Repository.IRepository
 {
-    public class UnitOfWork:IUnitOfWork
+    public class UnitOfWork : IUnitOfWork
     {
         private readonly ApplicationDbContext _db;
         public ICategoryRepository category { get;private set; }
         public IProductRepository product { get; private set; }
 
         public ICompanyRepository company { get; private set; }
+
+        public ICartRepository carts { get; private set; }    
+
+        public IApplicationUserRepository applicationUser { get; private set; }
+
+        
         public UnitOfWork(ApplicationDbContext Db)
         {
            _db= Db;
+            applicationUser = new ApplicationUserRepository(_db);
+            carts = new CartRepository(_db);
             category = new CategoryRepository(_db);
             product = new ProductRepository(_db);
             company = new CompanyRepository(_db);

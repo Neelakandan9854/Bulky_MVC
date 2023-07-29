@@ -27,10 +27,19 @@ namespace Bulky.DataAccess.Repository.IRepository
             DbSet.Add(entity);
         }
 
-        public T Get(Expression<Func<T, bool>> filter, string? includeproperties = null)
+        public T Get(Expression<Func<T, bool>> filter, string? includeproperties = null, bool tracked = false)
         {
-            IQueryable<T> query = DbSet;
-            query= query.Where(filter);
+            IQueryable<T> query;
+            if (tracked)
+            {
+                query = DbSet;
+                
+            }
+            else
+            {
+                 query = DbSet.AsNoTracking();
+            }
+            query = query.Where(filter);
             if (!string.IsNullOrEmpty(includeproperties))
             {
                 foreach (var property in includeproperties.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
@@ -41,9 +50,14 @@ namespace Bulky.DataAccess.Repository.IRepository
             return query.FirstOrDefault();
         }
 
-        public IEnumerable<T> GetAll(string? includeproperties=null)
+        public IEnumerable<T> GetAll(Expression<Func<T, bool>>? filter, string? includeproperties=null)
         {
             IQueryable<T> query = DbSet;
+            if(filter != null)
+            {
+                query = query.Where(filter);
+            }
+            
             if (!string.IsNullOrEmpty(includeproperties))
             {
                 foreach(var property in includeproperties.Split(new char[] {','},StringSplitOptions.RemoveEmptyEntries)) 
